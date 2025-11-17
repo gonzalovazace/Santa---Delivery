@@ -1,0 +1,637 @@
+{
+  "categories": [
+    {
+      "id": "desayunos",
+      "name": "Desayunos",
+      "items": [
+        {
+          "name": "Clásico",
+          "description": "2 medialunas, café con leche y jugo exprimido chico",
+          "price": 7000
+        },
+        {
+          "name": "De campo",
+          "description": "Tostadas de pan de campo con queso y mermelada, café o té y jugo exprimido chico",
+          "price": 10000
+        },
+        {
+          "name": "Fat",
+          "description": "Tostado de jamón y queso, café o té y jugo exprimido chico",
+          "price": 13000
+        },
+        {
+          "name": "Revoltoso",
+          "description": "Tostón, huevos revueltos, queso y palta (opcional: panceta) y jugo exprimido chico",
+          "price": 13000
+        },
+        {
+          "name": "Croissant con jamón y queso",
+          "price": 6000
+        },
+        {
+          "name": "Tostado de jamón y queso (árabe, pebete o francés)",
+          "price": 10500
+        },
+        {
+          "name": "Tostada de pan de campo (manteca y dulce de leche o mermelada y queso crema)",
+          "price": 5000
+        }
+      ]
+    },
+    {
+      "id": "infusiones",
+      "name": "Infusiones / Cafetería",
+      "items": [
+        {
+          "name": "Café con leche/crema o doble",
+          "price": 3500
+        },
+        {
+          "name": "Capuchino / Submarino",
+          "price": 4000
+        },
+        {
+          "name": "Chocolatada",
+          "price": 3500
+        },
+        {
+          "name": "Café",
+          "price": 3000
+        },
+        {
+          "name": "Té",
+          "price": 3000
+        }
+      ]
+    },
+    {
+      "id": "entradas",
+      "name": "Entradas",
+      "items": [
+        {
+          "name": "Palta, camarones y palmitos",
+          "price": 19000
+        },
+        {
+          "name": "Langostinos naturales con salsa golf (8-10u)",
+          "price": 21000
+        },
+        {
+          "name": "Mayonesa de atún",
+          "price": 15000
+        },
+        {
+          "name": "Sticks de pollo crispy con avena y sésamo",
+          "price": 14000
+        },
+        {
+          "name": "Muzzarella apanada",
+          "price": 14000
+        },
+        {
+          "name": "Boquerones",
+          "price": 13000
+        },
+        {
+          "name": "Anchoas",
+          "price": 13000
+        },
+        {
+          "name": "Adicionales: Jamón, queso, huevo",
+          "price": 3000
+        }
+      ]
+    },
+    {
+      "id": "ensaladas",
+      "name": "Ensaladas",
+      "items": [
+        {
+          "name": "20-19",
+          "description": "Palta, rúcula, parmesano y tomate cherry",
+          "price": 16500
+        },
+        {
+          "name": "Caesar",
+          "description": "Mix de hojas verdes, pollo, tomates cherry, parmesano, croutons y aderezo caesar",
+          "price": 16000
+        },
+        {
+          "name": "Caesar de atún",
+          "description": "Mix de hojas verdes, atún, tomates cherry, parmesano, croutons y aderezo caesar",
+          "price": 16000
+        },
+        {
+          "name": "Latún",
+          "description": "Arroz, tomate, atún y huevo duro",
+          "price": 17500
+        },
+        {
+          "name": "Capresse",
+          "description": "Tomate, queso y albahaca",
+          "price": 13500
+        },
+        {
+          "name": "Santa",
+          "description": "Lechuga, rúcula, langostinos apanados, semillas y queso parmesano",
+          "price": 17000
+        },
+        {
+          "name": "PG",
+          "description": "Tomate cherry, palta, hojas verdes, almendras tostadas y huevo poche",
+          "price": 15000
+        },
+        {
+          "name": "Coronada",
+          "description": "Arroz yamani, atún, cebolla morada, cherry y queso Mar del Plata",
+          "price": 14000
+        },
+        {
+          "name": "Tres ingredientes",
+          "description": "Lechuga, tomate, apio, rúcula, zanahoria, choclo, arroz o yamani",
+          "price": 12000
+        }
+      ]
+    },
+    {
+      "id": "pescados",
+      "name": "Pescados",
+      "items": [
+        {
+          "name": "Merluza a la romana",
+          "description": "Guarnición: Papas fritas, papas naturales, vegetales salteados o puré",
+          "price": 25000
+        },
+        {
+          "name": "Lenguado/abadejo al roquefort con puré duquesa",
+          "price": 40000
+        },
+        {
+          "name": "Lenguado/abadejo camarón con puré duquesa",
+          "price": 40000
+        },
+        {
+          "name": "Pesca del Día (Chernia)",
+          "price": 25000
+        },
+        {
+          "name": "Pesca del Día (Salmón Rosado)",
+          "price": 31000
+        }
+      ]
+    },
+    {
+      "id": "mariscos",
+      "name": "Mariscos",
+      "items": [
+        {
+          "name": "Rabas (porción)",
+          "price": 30000
+        },
+        {
+          "name": "Rabas (media porción)",
+          "price": 24000
+        },
+        {
+          "name": "Rabas provenzal (porción)",
+          "price": 32000
+        },
+        {
+          "name": "Rabas provenzal (media porción)",
+          "price": 26000
+        },
+        {
+          "name": "Arroz con mariscos (porción)",
+          "price": 42000
+        },
+        {
+          "name": "Arroz con mariscos (media porción)",
+          "price": 30000
+        },
+        {
+          "name": "Gambas al ajillo con papas españolas",
+          "price": 22000
+        },
+        {
+          "name": "Langostinos apanados (8-10p)",
+          "price": 22000
+        },
+        {
+          "name": "Mejillones a la provenzal",
+          "price": 29000
+        },
+        {
+          "name": "Mix de mar",
+          "price": 38000
+        }
+      ]
+    },
+    {
+      "id": "pastas",
+      "name": "Pastas",
+      "items": [
+        {
+          "name": "Sorrentinos de jamón y mozzarella",
+          "price": 22000
+        },
+        {
+          "name": "Raviolones verdes de calabaza y mozzarella",
+          "price": 22000
+        },
+        {
+          "name": "Spaghetti (clásico)",
+          "price": 19000
+        },
+        {
+          "name": "Spaghetti con frutos de mar",
+          "price": 26000
+        },
+        {
+          "name": "Pasta seca con crema/fileto/manteca (opciones)",
+          "price": 15000
+        }
+      ]
+    },
+    {
+      "id": "carnes",
+      "name": "Carnes",
+      "items": [
+        {
+          "name": "Suprema",
+          "price": 20000
+        },
+        {
+          "name": "Suprema napolitana",
+          "price": 22000
+        },
+        {
+          "name": "¼ de pollo grillado",
+          "price": 20000
+        },
+        {
+          "name": "Ojo de bife",
+          "price": 25000
+        },
+        {
+          "name": "Milanesa de ternera",
+          "price": 20000
+        },
+        {
+          "name": "Milanesa de ternera napolitana",
+          "price": 22000
+        },
+        {
+          "name": "Milanesa de peceto con fideos gratinados",
+          "price": 21000
+        },
+        {
+          "name": "Milanesa de peceto napolitana con fideos gratinados",
+          "price": 23000
+        },
+        {
+          "name": "Milanesa de ternera (otro formato)",
+          "price": 25000
+        }
+      ]
+    },
+    {
+      "id": "sandwiches-frios",
+      "name": "Sandwiches fríos",
+      "items": [
+        {
+          "name": "Jamón cocido y queso",
+          "price": 10500
+        },
+        {
+          "name": "Jamón crudo, manteca y queso",
+          "price": 12000
+        },
+        {
+          "name": "Primavera de jamón cocido",
+          "price": 12500
+        },
+        {
+          "name": "Primavera de jamón crudo",
+          "price": 14000
+        },
+        {
+          "name": "Triple de miga de jamón y queso",
+          "price": 10500
+        },
+        {
+          "name": "Blanco de ave con tomate y lechuga",
+          "price": 13000
+        },
+        {
+          "name": "Blanco de ave completo (huevo duro, jamón, queso, tomate y lechuga)",
+          "price": 14500
+        },
+        {
+          "name": "Atún, tomate, queso y mayonesa",
+          "price": 14000
+        }
+      ]
+    },
+    {
+      "id": "sandwiches-calientes",
+      "name": "Sandwiches calientes",
+      "items": [
+        {
+          "name": "Lomo dos ingredientes",
+          "price": 17500
+        },
+        {
+          "name": "Lomo completo",
+          "price": 20000
+        },
+        {
+          "name": "Milanesa dos ingredientes",
+          "price": 15500
+        },
+        {
+          "name": "Milanesa completa",
+          "price": 17500
+        },
+        {
+          "name": "Suprema dos ingredientes",
+          "price": 15500
+        },
+        {
+          "name": "Suprema completa",
+          "price": 17500
+        },
+        {
+          "name": "Pollo grille, queso gratinado, tomate y palta",
+          "price": 16500
+        },
+        {
+          "name": "Hamburguesa dos ingredientes",
+          "price": 13000
+        },
+        {
+          "name": "Hamburguesa completa",
+          "price": 14000
+        }
+      ]
+    },
+    {
+      "id": "vegetarianos",
+      "name": "Vegetarianos",
+      "items": [
+        {
+          "name": "Rúcula, tomate, palta, queso crema, zanahoria",
+          "price": 10000
+        },
+        {
+          "name": "Palta, queso, tomate",
+          "price": 10000
+        }
+      ]
+    },
+    {
+      "id": "tortillas-omelettes",
+      "name": "Tortillas / Omelettes",
+      "items": [
+        {
+          "name": "Omelette de jamón y queso",
+          "price": 14000
+        },
+        {
+          "name": "Omelette de gambas",
+          "price": 18000
+        },
+        {
+          "name": "Tortilla de papas / española",
+          "price": 16000
+        },
+        {
+          "name": "Revuelto de gramajo (porción)",
+          "price": 25000
+        },
+        {
+          "name": "Revuelto de gramajo (media porción)",
+          "price": 18000
+        }
+      ]
+    },
+    {
+      "id": "guarniciones",
+      "name": "Guarniciones",
+      "items": [
+        {
+          "name": "Papas fritas caseras corte bastón",
+          "price": 12000
+        },
+        {
+          "name": "Papas fritas caseras a caballo",
+          "price": 15000
+        },
+        {
+          "name": "Puré de papa / calabaza / mixto",
+          "price": 9000
+        },
+        {
+          "name": "Timbal de arroz",
+          "price": 9000
+        },
+        {
+          "name": "Ensalada mixta",
+          "price": 6500
+        }
+      ]
+    },
+    {
+      "id": "postres",
+      "name": "Postres",
+      "items": [
+        {
+          "name": "Waffle de dulce de leche o mixto",
+          "price": 9000
+        },
+        {
+          "name": "Queso y dulce",
+          "price": 7500
+        },
+        {
+          "name": "Helado dos bochas",
+          "price": 6500
+        },
+        {
+          "name": "Ensalada de frutas",
+          "price": 6500
+        },
+        {
+          "name": "Flan casero",
+          "price": 6500
+        },
+        {
+          "name": "Adicionales (crema, nueces, almendras o dulce de leche)",
+          "price": 2500
+        }
+      ]
+    },
+    {
+      "id": "bebidas",
+      "name": "Bebidas sin alcohol",
+      "items": [
+        {
+          "name": "Agua Villavicencio Reserva 500ml",
+          "price": 3500
+        },
+        {
+          "name": "Gaseosas Línea Pepsi 350cc",
+          "price": 3500
+        },
+        {
+          "name": "Agua saborizada Levité 500ml",
+          "price": 3500
+        },
+        {
+          "name": "Licuados / Jugos exprimidos vaso 500cc",
+          "price": 6000
+        },
+        {
+          "name": "Limonada vaso 500cc",
+          "price": 3500
+        },
+        {
+          "name": "Limonada jarra 1L",
+          "price": 5000
+        },
+        {
+          "name": "Limonada jarra 2L",
+          "price": 7000
+        },
+        {
+          "name": "Speed",
+          "price": 3500
+        }
+      ]
+    },
+    {
+      "id": "cervezas",
+      "name": "Cervezas",
+      "items": [
+        {
+          "name": "Budweiser Porrón 355cc",
+          "price": 5000
+        },
+        {
+          "name": "Bucket de Budweiser x6",
+          "price": 25000
+        },
+        {
+          "name": "Copa Stella Artois 330cc",
+          "price": 5000
+        },
+        {
+          "name": "Stella Artois Porrón 355cc",
+          "price": 6000
+        },
+        {
+          "name": "Stella Artois 970cc",
+          "price": 12000
+        },
+        {
+          "name": "Patagonia / Bohemian 410cc",
+          "price": 6000
+        },
+        {
+          "name": "Corona porrón 330cc",
+          "price": 6000
+        },
+        {
+          "name": "Bucket de Corona x6",
+          "price": 30000
+        },
+        {
+          "name": "Stella Artois porrón 0.0%",
+          "price": 3500
+        }
+      ]
+    },
+    {
+      "id": "tragos",
+      "name": "Tragos",
+      "items": [
+        {
+          "name": "Branca & Cola",
+          "price": 7000
+        },
+        {
+          "name": "Caipirinha",
+          "price": 8000
+        },
+        {
+          "name": "Carpano orange / originale",
+          "price": 10000
+        },
+        {
+          "name": "Ramazzotti Rosato tonic / spritz",
+          "price": 8500
+        },
+        {
+          "name": "Playerito - Callia, naranja y soda",
+          "price": 8500
+        },
+        {
+          "name": "Oso Negro / Brighton tonic",
+          "price": 7000
+        },
+        {
+          "name": "Beefeater tonic",
+          "price": 8000
+        },
+        {
+          "name": "Hendrick's tonic",
+          "price": 10000
+        },
+        {
+          "name": "Caipi de maracuyá / frutos rojos",
+          "price": 8500
+        },
+        {
+          "name": "Daiquiri (frutilla / durazno / ananá)",
+          "price": 7000
+        }
+      ]
+    },
+    {
+      "id": "jarras-clericos",
+      "name": "Jarras / Clericós",
+      "items": [
+        {
+          "name": "Clericó con Altos del Plata Chardonnay",
+          "price": 21000
+        },
+        {
+          "name": "Clericó dulce tardío (Norton / Callia / Cafayate)",
+          "price": 18000
+        },
+        {
+          "name": "Jarra de frutas con vino a elección",
+          "price": 6500
+        },
+        {
+          "name": "Jarra de frutas con Chandon Extra Brut / Apéritif / Délice / Rosé 750cc",
+          "price": 38000
+        },
+        {
+          "name": "Tintillo de verano con Altos del Plata Malbec",
+          "price": 21000
+        }
+      ]
+    },
+    {
+      "id": "servicio-de-mesa",
+      "name": "Servicio de mesa",
+      "items": [
+        {
+          "name": "Servicio de mesa",
+          "description": "Cargo por servicio de mesa",
+          "price": 1000
+        }
+      ]
+    }
+  ]
+}
