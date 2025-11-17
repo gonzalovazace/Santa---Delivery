@@ -81,12 +81,24 @@
         border: none; border-radius: 8px; font-size: 16px; cursor: pointer; 
         font-weight: bold; margin-top: 15px;
     }
+      /* Dentro de la sección de estilos CSS */
+#mainLogo {
+    height: 35px; /* Ajusta este valor al tamaño que desees */
+    width: auto;
+}
+/* Asegura que el header mantenga la alineación vertical */
+header { 
+    /* ... lo que ya tienes ... */
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+}
   </style>
 </head>
 <body>
 <header>
     <button id="menuBtn" onclick="toggleMenu()">☰</button>
-    <div style="font-size: 20px; font-weight: bold;">Santa</div>
+    <img src="logo santa.png" alt="Logo del Restaurante" id="mainLogo"> 
 </header>
 
 <nav id="menuNav">
@@ -256,6 +268,86 @@ fetch('products.json') // Asegúrate de que el nombre del archivo sea correcto
 
 // Inicializar el carrito para que el botón flotante se muestre si ya hay algo.
 renderCart();
+  // Dentro de tu <script>
+const ADICIONALES = [
+    { name: "Jamón", price: 3000 },
+    { name: "Queso", price: 3000 },
+    { name: "Huevo", price: 3000 },
+    { name: "Gambas (Premium)", price: 4000 },
+    { name: "Atún (Premium)", price: 4000 },
+    { name: "Palta (Premium)", price: 4000 },
+    { name: "Palmitos (Premium)", price: 4000 },
+    { name: "Ananá (Premium)", price: 4000 },
+    { name: "Parmesano (Premium)", price: 4000 },
+    { name: "Queso Azul (Premium)", price: 4000 }
+];
+
+const SANDWICH_PANS = ["Árabe", "Pebete", "Francés"];
+const SANDWICH_CATEGORIES = ['sandwiches-frios', 'sandwiches-calientes', 'vegetarianos'];
+const ENSALADA_CATEGORIES = ['ensaladas'];
+
+// --- Modificación de renderSections ---
+function renderSections(categories) {
+    const content = document.getElementById('content');
+
+    categories.forEach(cat => {
+        const sec = document.createElement('section');
+        sec.className = 'section';
+        sec.id = cat.id;
+        sec.innerHTML = `<h2>${cat.name}</h2>`;
+        
+        cat.items.forEach((item, index) => {
+            const itemId = `${cat.id}-${index}`;
+            let itemHtml = '';
+
+            // 1. Opciones de Sándwich (Pan y Tostado)
+            if (SANDWICH_CATEGORIES.includes(cat.id)) {
+                itemHtml += `
+                    <div style="margin-top: 8px;">
+                        <select id="pan-${itemId}" style="padding: 5px; margin-right: 10px;">
+                            ${SANDWICH_PANS.map(pan => `<option value="${pan}">${pan}</option>`).join('')}
+                        </select>
+                        <label>
+                            <input type="checkbox" id="tostado-${itemId}"> Tostado
+                        </label>
+                    </div>
+                `;
+            }
+
+            // 2. Opciones de Adicionales
+            if (SANDWICH_CATEGORIES.includes(cat.id) || ENSALADA_CATEGORIES.includes(cat.id)) {
+                itemHtml += `
+                    <div style="margin-top: 8px; font-size: 13px;">
+                        <strong>Adicionales:</strong><br>
+                        <div id="adicionales-${itemId}">
+                            ${ADICIONALES.map((ad, adIndex) => `
+                                <label style="display: block;">
+                                    <input type="checkbox" name="adicional-${itemId}" value="${ad.name}" data-price="${ad.price}"> ${ad.name} ($${formatPrice(ad.price)})
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <div class="item-details">
+                    <strong>${item.name}</strong>
+                    ${item.description ? `<div class='description'>${item.description}</div>` : ''}
+                    
+                    ${itemHtml}
+                    
+                    <button class='add-btn' onclick="prepareAndAddToCart('${itemId}', '${item.name.replace(/'/g, "\\'")}', ${item.price}, '${cat.id}')">Agregar</button>
+                </div>
+                <strong>${formatPrice(item.price)}</strong>
+            `;
+            sec.appendChild(div);
+        });
+        content.appendChild(sec);
+    });
+}
 </script>
 </body>
 </html>
