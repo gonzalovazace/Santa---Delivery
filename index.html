@@ -5,21 +5,99 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Carta Restaurante</title>
   <style>
-    body { font-family: serif; background: #f8f5f0; margin: 0; padding: 0; }
-    header { background: #ffffffcc; position: sticky; top: 0; backdrop-filter: blur(8px); padding: 12px; border-bottom: 1px solid #ddd; }
-    nav { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
-    nav a { text-decoration: none; color: #333; font-size: 14px; padding: 6px 10px; border-radius: 6px; }
+    body { font-family: sans-serif; background: #f8f5f0; margin: 0; padding-bottom: 80px; } /* Añadido padding-bottom */
+    header { 
+        background: #ffffffcc; 
+        position: sticky; 
+        top: 0; 
+        backdrop-filter: blur(8px); 
+        padding: 12px 0; 
+        border-bottom: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra sutil */
+        z-index: 10; /* Asegura que esté por encima del contenido */
+    }
+    nav { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; padding: 0 10px; }
+    nav a { 
+        text-decoration: none; 
+        color: #333; 
+        font-size: 14px; 
+        padding: 6px 10px; 
+        border-radius: 6px;
+        transition: background 0.2s; 
+    }
     nav a:hover { background: #e5e1da; }
-    .section { padding: 24px; max-width: 700px; margin: auto; }
-    .section h2 { text-align: center; margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
-    .item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dotted #bbb; }
+    .section { padding: 24px 15px; max-width: 700px; margin: auto; }
+    .section h2 { 
+        text-align: center; 
+        margin-bottom: 16px; 
+        border-bottom: 2px solid #555; /* Más visible */
+        padding-bottom: 6px; 
+        font-weight: bold;
+    }
+    .item { 
+        display: flex; 
+        justify-content: space-between; 
+        align-items: flex-start; /* Alineación para la descripción */
+        padding: 12px 0; 
+        border-bottom: 1px solid #eee; /* Línea más clara */
+    }
     .item:last-child { border-bottom: none; }
-    .description { font-size: 14px; color: #555; margin: 6px 0; }
-    .add-btn { margin-top: 4px; padding: 6px 10px; background: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; }
-    #cartPanel { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffffee; padding: 18px; border-top: 2px solid #ccc; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); font-size: 15px; }
-    #cartItems { max-height: 140px; overflow-y: auto; margin-bottom: 10px; }
-    .cart-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #ccc; }
-    #sendBtn { width: 100%; padding: 12px; background: #25d366; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    .item strong:last-child { 
+        font-size: 16px; 
+        color: #222; 
+        margin-left: 10px;
+        flex-shrink: 0; /* Evita que el precio se comprima */
+    }
+    .item-details { max-width: 70%; }
+    .description { font-size: 13px; color: #777; margin: 4px 0 8px 0; }
+    .add-btn { 
+        margin-top: 4px; 
+        padding: 6px 10px; 
+        background: #17a2b8; /* Color de acción */
+        color: #fff; 
+        border: none; 
+        border-radius: 4px; 
+        cursor: pointer; 
+        font-size: 13px;
+        font-weight: bold;
+        transition: background 0.2s;
+    }
+    .add-btn:hover { background: #138496; }
+    
+    /* ESTILOS DEL CARRITO */
+    #cartPanel { 
+        position: fixed; 
+        bottom: 0; 
+        left: 0; 
+        right: 0; 
+        background: #ffffffee; 
+        padding: 12px 18px; 
+        border-top: 2px solid #ccc; 
+        box-shadow: 0 -2px 8px rgba(0,0,0,0.1); 
+        font-size: 14px; 
+    }
+    #cartItems { max-height: 120px; overflow-y: auto; margin-top: 8px; margin-bottom: 10px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px dashed #ccc; }
+    .remove-btn { 
+        background: none; 
+        border: none; 
+        color: #cc0000; 
+        cursor: pointer; 
+        font-size: 18px; 
+        padding: 0 5px;
+    }
+    #total { margin-top: 8px; font-size: 16px; font-weight: bold; }
+    #sendBtn { 
+        width: 100%; 
+        padding: 14px; 
+        background: #25d366; 
+        color: white; 
+        border: none; 
+        border-radius: 8px; 
+        font-size: 16px; 
+        cursor: pointer;
+        font-weight: bold; /* Más énfasis */
+    }
   </style>
 </head>
 <body>
@@ -27,77 +105,141 @@
   <nav id="menuNav"></nav>
 </header>
 <div id="content"></div>
-<div id="cartPanel">
+
+<div id="cartPanel" style="display: none;">
   <div><strong>🧺 Tu pedido</strong></div>
   <div id="cartItems"></div>
   <div id="total"></div>
   <button id="sendBtn" onclick="sendToWhatsApp()">Enviar por WhatsApp</button>
 </div>
+
 <script>
 let cart = [];
 let data = {};
+const WAPP_NUMBER = '5492235776624'; // Tu número de WhatsApp
+
+// Función para formatear el precio a moneda argentina (ej: 15.000)
+function formatPrice(price) {
+    if (typeof price !== 'number') return `$${price}`;
+    return `$${price.toLocaleString('es-AR', { minimumFractionDigits: 0 })}`;
+}
+
 function addToCart(name, price) {
-  cart.push({ name, price });
-  renderCart();
+    cart.push({ name, price });
+    renderCart();
 }
+
+function removeItem(index) {
+    cart.splice(index, 1);
+    renderCart();
+}
+
 function renderCart() {
-  const cartItems = document.getElementById('cartItems');
-  cartItems.innerHTML = '';
-  let total = 0;
-  cart.forEach(item => {
-    total += item.price;
-    const div = document.createElement('div');
-    div.className = 'cart-item';
-    div.innerHTML = `${item.name} <strong>$${item.price}</strong>`;
-    cartItems.appendChild(div);
-  });
-  document.getElementById('total').innerHTML = `<strong>Total: $${total}</strong>`;
+    const cartItemsContainer = document.getElementById('cartItems');
+    const totalElement = document.getElementById('total');
+    const cartPanel = document.getElementById('cartPanel');
+    
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    
+    if (cart.length === 0) {
+        cartPanel.style.display = 'none';
+        return;
+    }
+
+    cartPanel.style.display = 'block';
+
+    // Usamos un bucle for tradicional para obtener el índice
+    for (let i = 0; i < cart.length; i++) {
+        const item = cart[i];
+        total += item.price;
+        
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+            <span>${item.name}</span>
+            <span>
+                <strong>${formatPrice(item.price)}</strong>
+                <button class='remove-btn' onclick="removeItem(${i})">X</button>
+            </span>
+        `;
+        cartItemsContainer.appendChild(div);
+    }
+    
+    const item_count = cart.length;
+    totalElement.innerHTML = `<strong>Total: ${formatPrice(total)}</strong>`;
+    document.getElementById('sendBtn').innerHTML = `
+        Enviar ${item_count} ${item_count === 1 ? 'producto' : 'productos'} por WhatsApp
+    `;
 }
+
 function sendToWhatsApp() {
-  if (!cart.length) return;
-  const message = cart.map(i => `${i.name} - $${i.price}`).join("%0A");
-  const url = `https://wa.me/5492235776624?text=Hola!%20Quería%20pedir:%0A${message}`;
-  window.open(url, '_blank');
+    if (!cart.length) return;
+    
+    const header = encodeURIComponent("¡Hola! Me gustaría hacer un pedido.");
+    
+    // Crear la lista de ítems para el mensaje
+    const itemsList = cart.map(item => 
+        encodeURIComponent(`- ${item.name} (${formatPrice(item.price)})`)
+    ).join("%0A"); // %0A es el salto de línea en URL
+    
+    // Calcular el total para el mensaje
+    const total = cart.reduce((sum, item) => sum + item.price, 0);
+    const totalMsg = encodeURIComponent(`Total estimado: ${formatPrice(total)}`);
+    
+    const message = `${header}%0A%0A${itemsList}%0A%0A${totalMsg}`;
+    
+    const url = `https://wa.me/${WAPP_NUMBER}?text=${message}`;
+    window.open(url, '_blank');
 }
+
 function renderMenu(categories) {
-  const nav = document.getElementById('menuNav');
-  categories.forEach(cat => {
-    const a = document.createElement('a');
-    a.href = `#${cat.id}`;
-    a.innerText = cat.name;
-    nav.appendChild(a);
-  });
-}
-function renderSections(categories) {
-  const content = document.getElementById('content');
-  categories.forEach(cat => {
-    const sec = document.createElement('section');
-    sec.className = 'section';
-    sec.id = cat.id;
-    sec.innerHTML = `<h2>${cat.name}</h2>`;
-    cat.items.forEach(item => {
-      const div = document.createElement('div');
-      div.className = 'item';
-      div.innerHTML = `
-        <div>
-          <strong>${item.name}</strong>
-          ${item.description ? `<div class='description'>${item.description}</div>` : ''}
-          <button class='add-btn' onclick="addToCart('${item.name}', ${item.price})">Agregar</button>
-        </div>
-        <strong>$${item.price}</strong>
-      `;
-      sec.appendChild(div);
+    const nav = document.getElementById('menuNav');
+    categories.forEach(cat => {
+        const a = document.createElement('a');
+        a.href = `#${cat.id}`;
+        a.innerText = cat.name;
+        nav.appendChild(a);
     });
-    content.appendChild(sec);
-  });
 }
+
+function renderSections(categories) {
+    const content = document.getElementById('content');
+    categories.forEach(cat => {
+        const sec = document.createElement('section');
+        sec.className = 'section';
+        sec.id = cat.id;
+        sec.innerHTML = `<h2>${cat.name}</h2>`;
+        
+        cat.items.forEach(item => {
+            const div = document.createElement('div');
+            div.className = 'item';
+            div.innerHTML = `
+                <div class="item-details">
+                    <strong>${item.name}</strong>
+                    ${item.description ? `<div class='description'>${item.description}</div>` : ''}
+                    <button class='add-btn' onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">Agregar</button>
+                </div>
+                <strong>${formatPrice(item.price)}</strong>
+            `;
+            sec.appendChild(div);
+        });
+        content.appendChild(sec);
+    });
+}
+
+// Carga de datos
 fetch('products.json')
-  .then(res => res.json())
-  .then(json => {
-    data = json;
-    renderMenu(json.categories);
-    renderSections(json.categories);
-  });
+    .then(res => res.json())
+    .then(json => {
+        data = json;
+        renderMenu(json.categories);
+        renderSections(json.categories);
+    })
+    .catch(error => {
+        console.error("Error al cargar el JSON:", error);
+        document.getElementById('content').innerHTML = "<p style='text-align:center;'>Hubo un error al cargar el menú. Inténtalo más tarde.</p>";
+    });
 </script>
 </body>
 </html>
