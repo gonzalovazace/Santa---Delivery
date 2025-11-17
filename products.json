@@ -622,15 +622,6 @@
         }
       ]
     },
-    {
-      "id": "servicio-de-mesa",
-      "name": "Servicio de mesa",
-      "items": [
-        {
-          "name": "Servicio de mesa",
-          "description": "Cargo por servicio de mesa",
-          "price": 1000
-        }
       ]
     }
   ]
