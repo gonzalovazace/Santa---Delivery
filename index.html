@@ -19,6 +19,7 @@
     .add-btn { 
         padding: 6px 10px; background: #17a2b8; color: #fff; border: none; 
         border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold;
+        margin-top: 10px; /* Para separarlo de las opciones */
     }
     .section h2 { text-align: center; margin-bottom: 16px; border-bottom: 2px solid #555; padding-bottom: 6px; font-weight: bold; }
 
@@ -81,18 +82,12 @@
         border: none; border-radius: 8px; font-size: 16px; cursor: pointer; 
         font-weight: bold; margin-top: 15px;
     }
-      /* Dentro de la sección de estilos CSS */
-#mainLogo {
-    height: 35px; /* Ajusta este valor al tamaño que desees */
-    width: auto;
-}
-/* Asegura que el header mantenga la alineación vertical */
-header { 
-    /* ... lo que ya tienes ... */
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-}
+
+    /* ESTILOS DEL LOGO */
+    #mainLogo {
+        height: 35px; 
+        width: auto;
+    }
   </style>
 </head>
 <body>
@@ -103,7 +98,7 @@ header {
 
 <nav id="menuNav">
     <button id="closeMenuBtn" onclick="toggleMenu()">✖</button>
-    </nav>
+</nav>
 
 <div id="content"></div>
 
@@ -122,12 +117,40 @@ header {
 </div>
 
 <script>
+// ===============================================
+// 1. CONSTANTES DE OPCIONES Y DATOS DEL MENÚ
+// ===============================================
+
 let cart = [];
 let data = {};
-const WAPP_NUMBER = '5492235776624'; 
+const WAPP_NUMBER = '5492235776624';
+
+const ADICIONALES = [
+    { name: "Jamón", price: 3000 },
+    { name: "Queso", price: 3000 },
+    { name: "Huevo", price: 3000 },
+    { name: "Gambas (Premium)", price: 4000 },
+    { name: "Atún (Premium)", price: 4000 },
+    { name: "Palta (Premium)", price: 4000 },
+    { name: "Palmitos (Premium)", price: 4000 },
+    { name: "Ananá (Premium)", price: 4000 },
+    { name: "Parmesano (Premium)", price: 4000 },
+    { name: "Queso Azul (Premium)", price: 4000 }
+];
+
+const SANDWICH_PANS = ["Árabe", "Pebete", "Francés"];
+// Usamos los IDs del JSON para categorizar
+const SANDWICH_CATEGORIES = ['sandwiches-frios', 'sandwiches-calientes', 'vegetarianos'];
+const ENSALADA_CATEGORIES = ['ensaladas'];
+
+
+// ===============================================
+// 2. FUNCIONES DE UTILIDAD Y LÓGICA DE CARRITO
+// ===============================================
 
 function formatPrice(price) {
     if (typeof price !== 'number') return `$${price}`;
+    // Usamos es-AR para separar miles con punto.
     return `$${price.toLocaleString('es-AR', { minimumFractionDigits: 0 })}`;
 }
 
@@ -140,15 +163,9 @@ function showCartModal() {
 }
 
 function hideCartModal(event) {
-    // Solo cerramos si se hace clic en el fondo gris oscuro, no en el contenido del carrito
     if (event.target.id === 'cartModal') {
         document.getElementById('cartModal').style.display = 'none';
     }
-}
-
-function addToCart(name, price) {
-    cart.push({ name, price });
-    renderCart();
 }
 
 function removeItem(index) {
@@ -168,7 +185,7 @@ function renderCart() {
     if (cart.length === 0) {
         floatBtn.style.display = 'none';
         cartBadge.innerText = '0';
-        document.getElementById('cartModal').style.display = 'none'; // Asegura que el modal se oculte
+        document.getElementById('cartModal').style.display = 'none';
         return;
     }
 
@@ -190,7 +207,6 @@ function renderCart() {
         cartItemsContainer.appendChild(div);
     }
     
-    // Actualizar Total y Badge
     const item_count = cart.length;
     totalElement.innerHTML = `<strong>Total: ${formatPrice(total)}</strong>`;
     cartBadge.innerText = item_count;
@@ -201,12 +217,10 @@ function sendToWhatsApp() {
     
     const header = encodeURIComponent("¡Hola! Me gustaría hacer el siguiente pedido:");
     
-    // Lista de ítems
     const itemsList = cart.map(item => 
         encodeURIComponent(`- ${item.name} (${formatPrice(item.price)})`)
     ).join("%0A"); 
     
-    // Total
     const total = cart.reduce((sum, item) => sum + item.price, 0);
     const totalMsg = encodeURIComponent(`Total estimado: ${formatPrice(total)}`);
     
@@ -216,13 +230,83 @@ function sendToWhatsApp() {
     window.open(url, '_blank');
 }
 
+
+// --- LÓGICA AVANZADA DE OPCIONES ---
+
+function resetItemOptions(itemId) {
+    // Reset Pan/Tostado
+    const panSelect = document.getElementById(`pan-${itemId}`);
+    if (panSelect) panSelect.selectedIndex = 0;
+    
+    const tostadoCheck = document.getElementById(`tostado-${itemId}`);
+    if (tostadoCheck) tostadoCheck.checked = false;
+    
+    // Reset Adicionales
+    const adicionalesChecks = document.querySelectorAll(`#adicionales-${itemId} input[type="checkbox"]`);
+    adicionalesChecks.forEach(check => check.checked = false);
+}
+
+function prepareAndAddToCart(itemId, baseName, basePrice, categoryId) {
+    let finalName = baseName;
+    let finalPrice = basePrice;
+    let details = [];
+
+    // 1. Lógica de Sándwich (Pan y Tostado)
+    if (SANDWICH_CATEGORIES.includes(categoryId)) {
+        const pan = document.getElementById(`pan-${itemId}`).value;
+        const tostado = document.getElementById(`tostado-${itemId}`).checked;
+        
+        details.push(`Pan: ${pan}`);
+        if (tostado) {
+            details.push("Tostado: Sí");
+            // Se puede agregar al nombre final, pero en este caso solo usamos los detalles
+        }
+    }
+
+    // 2. Lógica de Adicionales
+    if (SANDWICH_CATEGORIES.includes(categoryId) || ENSALADA_CATEGORIES.includes(categoryId)) {
+        const adicionalesChecks = document.querySelectorAll(`#adicionales-${itemId} input[type="checkbox"]:checked`);
+        let adicionalesList = [];
+
+        adicionalesChecks.forEach(check => {
+            const adName = check.value;
+            const adPrice = parseInt(check.getAttribute('data-price'));
+            finalPrice += adPrice;
+            adicionalesList.push(adName);
+        });
+
+        if (adicionalesList.length > 0) {
+            details.push(`+ ${adicionalesList.join(", ")}`);
+        }
+    }
+
+    // Construcción del nombre final para el carrito
+    const detailsString = details.length > 0 ? ` [${details.join(" / ")}]` : '';
+    const finalItemName = baseName + detailsString;
+    
+    // Añadir al carrito con el precio y nombre final
+    cart.push({ 
+        name: finalItemName, 
+        price: finalPrice 
+    });
+    
+    // Limpiar las opciones después de agregar
+    resetItemOptions(itemId);
+    
+    renderCart();
+}
+
+
+// ===============================================
+// 3. FUNCIONES DE RENDERIZADO (MENÚ PRINCIPAL)
+// ===============================================
+
 function renderMenu(categories) {
     const nav = document.getElementById('menuNav');
     categories.forEach(cat => {
         const a = document.createElement('a');
         a.href = `#${cat.id}`;
         a.innerText = cat.name;
-        // Al hacer clic en un enlace del menú, se cierra el menú
         a.onclick = toggleMenu; 
         nav.appendChild(a);
     });
@@ -230,65 +314,7 @@ function renderMenu(categories) {
 
 function renderSections(categories) {
     const content = document.getElementById('content');
-    categories.forEach(cat => {
-        const sec = document.createElement('section');
-        sec.className = 'section';
-        sec.id = cat.id;
-        sec.innerHTML = `<h2>${cat.name}</h2>`;
-        
-        cat.items.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'item';
-            div.innerHTML = `
-                <div class="item-details">
-                    <strong>${item.name}</strong>
-                    ${item.description ? `<div class='description'>${item.description}</div>` : ''}
-                    <button class='add-btn' onclick="addToCart('${item.name.replace(/'/g, "\\'")}', ${item.price})">Agregar</button>
-                </div>
-                <strong>${formatPrice(item.price)}</strong>
-            `;
-            sec.appendChild(div);
-        });
-        content.appendChild(sec);
-    });
-}
-
-// Carga de datos
-fetch('products.json') // Asegúrate de que el nombre del archivo sea correcto
-    .then(res => res.json())
-    .then(json => {
-        data = json;
-        renderMenu(json.categories);
-        renderSections(json.categories);
-    })
-    .catch(error => {
-        console.error("Error al cargar el JSON:", error);
-        document.getElementById('content').innerHTML = "<p style='text-align:center;'>Hubo un error al cargar el menú. Asegúrate que el archivo 'productos.json' esté en la misma carpeta.</p>";
-    });
-
-// Inicializar el carrito para que el botón flotante se muestre si ya hay algo.
-renderCart();
-  // Dentro de tu <script>
-const ADICIONALES = [
-    { name: "Jamón", price: 3000 },
-    { name: "Queso", price: 3000 },
-    { name: "Huevo", price: 3000 },
-    { name: "Gambas (Premium)", price: 4000 },
-    { name: "Atún (Premium)", price: 4000 },
-    { name: "Palta (Premium)", price: 4000 },
-    { name: "Palmitos (Premium)", price: 4000 },
-    { name: "Ananá (Premium)", price: 4000 },
-    { name: "Parmesano (Premium)", price: 4000 },
-    { name: "Queso Azul (Premium)", price: 4000 }
-];
-
-const SANDWICH_PANS = ["Árabe", "Pebete", "Francés"];
-const SANDWICH_CATEGORIES = ['sandwiches-frios', 'sandwiches-calientes', 'vegetarianos'];
-const ENSALADA_CATEGORIES = ['ensaladas'];
-
-// --- Modificación de renderSections ---
-function renderSections(categories) {
-    const content = document.getElementById('content');
+    content.innerHTML = ''; // Limpiar el contenido antes de renderizar
 
     categories.forEach(cat => {
         const sec = document.createElement('section');
@@ -300,35 +326,41 @@ function renderSections(categories) {
             const itemId = `${cat.id}-${index}`;
             let itemHtml = '';
 
-            // 1. Opciones de Sándwich (Pan y Tostado)
-            if (SANDWICH_CATEGORIES.includes(cat.id)) {
-                itemHtml += `
-                    <div style="margin-top: 8px;">
-                        <select id="pan-${itemId}" style="padding: 5px; margin-right: 10px;">
-                            ${SANDWICH_PANS.map(pan => `<option value="${pan}">${pan}</option>`).join('')}
-                        </select>
-                        <label>
-                            <input type="checkbox" id="tostado-${itemId}"> Tostado
-                        </label>
-                    </div>
-                `;
-            }
+            const isSandwich = SANDWICH_CATEGORIES.includes(cat.id);
+            const isEnsalada = ENSALADA_CATEGORIES.includes(cat.id);
 
-            // 2. Opciones de Adicionales
-            if (SANDWICH_CATEGORIES.includes(cat.id) || ENSALADA_CATEGORIES.includes(cat.id)) {
+            // SOLO mostrar opciones si es sándwich o ensalada
+            if (isSandwich || isEnsalada) {
+                // 1. Opciones de Sándwich (Pan y Tostado)
+                if (isSandwich) {
+                    itemHtml += `
+                        <div style="margin-top: 8px;">
+                            <select id="pan-${itemId}" style="padding: 5px; margin-right: 10px;">
+                                <option value="" disabled selected>Elegir Pan</option>
+                                ${SANDWICH_PANS.map(pan => `<option value="${pan}">${pan}</option>`).join('')}
+                            </select>
+                            <label>
+                                <input type="checkbox" id="tostado-${itemId}"> Tostado
+                            </label>
+                        </div>
+                    `;
+                }
+
+                // 2. Opciones de Adicionales
                 itemHtml += `
-                    <div style="margin-top: 8px; font-size: 13px;">
-                        <strong>Adicionales:</strong><br>
-                        <div id="adicionales-${itemId}">
+                    <div style="margin-top: 10px; font-size: 13px; border-top: 1px dashed #ccc; padding-top: 8px;">
+                        <strong>Adicionales (opcional):</strong><br>
+                        <div id="adicionales-${itemId}" style="display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
                             ${ADICIONALES.map((ad, adIndex) => `
-                                <label style="display: block;">
-                                    <input type="checkbox" name="adicional-${itemId}" value="${ad.name}" data-price="${ad.price}"> ${ad.name} ($${formatPrice(ad.price)})
+                                <label style="display: flex; align-items: center; white-space: nowrap;">
+                                    <input type="checkbox" name="adicional-${itemId}" value="${ad.name}" data-price="${ad.price}" style="margin-right: 5px;"> ${ad.name}
+                                    <small>(${formatPrice(ad.price)})</small>
                                 </label>
                             `).join('')}
                         </div>
                     </div>
                 `;
-            }
+            } // Fin de la verificación de categorías (if isSandwich || isEnsalada)
 
             const div = document.createElement('div');
             div.className = 'item';
@@ -348,6 +380,27 @@ function renderSections(categories) {
         content.appendChild(sec);
     });
 }
+
+
+// ===============================================
+// 4. INICIALIZACIÓN
+// ===============================================
+
+// Carga de datos
+fetch('products.json')
+    .then(res => res.json())
+    .then(json => {
+        data = json;
+        renderMenu(json.categories);
+        renderSections(json.categories);
+    })
+    .catch(error => {
+        console.error("Error al cargar el JSON:", error);
+        document.getElementById('content').innerHTML = "<p style='text-align:center;'>Hubo un error al cargar el menú. Asegúrate que el archivo 'products.json' esté en la misma carpeta.</p>";
+    });
+
+// Inicializar el carrito (para el botón flotante)
+renderCart();
 </script>
 </body>
 </html>
