@@ -1,1 +1,103 @@
-<!DOCTYPE html><html><body><h1>Demo</h1></body></html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta Restaurante</title>
+  <style>
+    body { font-family: serif; background: #f8f5f0; margin: 0; padding: 0; }
+    header { background: #ffffffcc; position: sticky; top: 0; backdrop-filter: blur(8px); padding: 12px; border-bottom: 1px solid #ddd; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    nav a { text-decoration: none; color: #333; font-size: 14px; padding: 6px 10px; border-radius: 6px; }
+    nav a:hover { background: #e5e1da; }
+    .section { padding: 24px; max-width: 700px; margin: auto; }
+    .section h2 { text-align: center; margin-bottom: 16px; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
+    .item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dotted #bbb; }
+    .item:last-child { border-bottom: none; }
+    .description { font-size: 14px; color: #555; margin: 6px 0; }
+    .add-btn { margin-top: 4px; padding: 6px 10px; background: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-size: 13px; }
+    #cartPanel { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffffee; padding: 18px; border-top: 2px solid #ccc; box-shadow: 0 -2px 8px rgba(0,0,0,0.1); font-size: 15px; }
+    #cartItems { max-height: 140px; overflow-y: auto; margin-bottom: 10px; }
+    .cart-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px dashed #ccc; }
+    #sendBtn { width: 100%; padding: 12px; background: #25d366; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+<header>
+  <nav id="menuNav"></nav>
+</header>
+<div id="content"></div>
+<div id="cartPanel">
+  <div><strong>🧺 Tu pedido</strong></div>
+  <div id="cartItems"></div>
+  <div id="total"></div>
+  <button id="sendBtn" onclick="sendToWhatsApp()">Enviar por WhatsApp</button>
+</div>
+<script>
+let cart = [];
+let data = {};
+function addToCart(name, price) {
+  cart.push({ name, price });
+  renderCart();
+}
+function renderCart() {
+  const cartItems = document.getElementById('cartItems');
+  cartItems.innerHTML = '';
+  let total = 0;
+  cart.forEach(item => {
+    total += item.price;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `${item.name} <strong>$${item.price}</strong>`;
+    cartItems.appendChild(div);
+  });
+  document.getElementById('total').innerHTML = `<strong>Total: $${total}</strong>`;
+}
+function sendToWhatsApp() {
+  if (!cart.length) return;
+  const message = cart.map(i => `${i.name} - $${i.price}`).join("%0A");
+  const url = `https://wa.me/5492235776624?text=Hola!%20Quería%20pedir:%0A${message}`;
+  window.open(url, '_blank');
+}
+function renderMenu(categories) {
+  const nav = document.getElementById('menuNav');
+  categories.forEach(cat => {
+    const a = document.createElement('a');
+    a.href = `#${cat.id}`;
+    a.innerText = cat.name;
+    nav.appendChild(a);
+  });
+}
+function renderSections(categories) {
+  const content = document.getElementById('content');
+  categories.forEach(cat => {
+    const sec = document.createElement('section');
+    sec.className = 'section';
+    sec.id = cat.id;
+    sec.innerHTML = `<h2>${cat.name}</h2>`;
+    cat.items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'item';
+      div.innerHTML = `
+        <div>
+          <strong>${item.name}</strong>
+          ${item.description ? `<div class='description'>${item.description}</div>` : ''}
+          <button class='add-btn' onclick="addToCart('${item.name}', ${item.price})">Agregar</button>
+        </div>
+        <strong>$${item.price}</strong>
+      `;
+      sec.appendChild(div);
+    });
+    content.appendChild(sec);
+  });
+}
+fetch('products.json')
+  .then(res => res.json())
+  .then(json => {
+    data = json;
+    renderMenu(json.categories);
+    renderSections(json.categories);
+  });
+</script>
+</body>
+</html>
